@@ -15,19 +15,12 @@ const PRODUCT_CATALOG_QUERY = `
         title
         description
         productType
-        tags
         availableForSale
         featuredImage {
           url
         }
         options {
           name
-        }
-        collections(first: 100) {
-          nodes {
-            title
-            handle
-          }
         }
         variants(first: ${VARIANTS_PER_PRODUCT}) {
           nodes {
@@ -128,7 +121,6 @@ function isCanonicalHostname(value: string): boolean {
 
 function getShopifyConfiguration(): { storeDomain: string; accessToken: string } {
   const storeDomain = process.env.SHOPIFY_STORE_DOMAIN ?? "";
-  const accessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN ?? "";
 
   if (!isCanonicalHostname(storeDomain)) {
     throw new Error(
@@ -136,13 +128,8 @@ function getShopifyConfiguration(): { storeDomain: string; accessToken: string }
     );
   }
 
-  if (accessToken.trim().length === 0) {
-    throw new Error("SHOPIFY_STOREFRONT_ACCESS_TOKEN is required.");
-  }
-
-  return { storeDomain, accessToken };
+  return { storeDomain, accessToken: "" };
 }
-
 function categoryFor(product: ShopifyProduct): string {
   const categorySources = [
     ...product.collections.nodes.flatMap(({ title, handle }) => [title, handle]),
@@ -214,8 +201,6 @@ async function fetchCatalogPage(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Shopify-Storefront-Access-Token": accessToken,
-      },
       body: JSON.stringify({
         query: PRODUCT_CATALOG_QUERY,
         variables: { after },
