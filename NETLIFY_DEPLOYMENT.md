@@ -6,7 +6,7 @@ The frontend loads live products from `/api/shopify/catalog`. The original Netli
 
 ## Catalog function
 
-`netlify/functions/shopify-catalog.mts` now calls the existing `server/shopify/catalog.ts` adapter. `netlify.toml` bundles that function with esbuild and routes `/api/shopify/catalog` to it **before** the SPA catch-all. Both Manus and Netlify therefore use the same live product mapping; no saved-catalog or fake-product fallback is added.
+`netlify/functions/shopify-catalog.mts` calls the existing `server/shopify/catalog.ts` adapter and declares `/api/shopify/catalog` through its Netlify `config.path`. `netlify.toml` bundles the function with esbuild and retains only the SPA catch-all. Do not add a second redirect for `/api/shopify/catalog`: a custom function path replaces the default `/.netlify/functions/<name>` URL. Both Manus and Netlify therefore use the same live product mapping; no saved-catalog or fake-product fallback is added.
 
 Netlify must build the full repository from `Ismaeel112/Sukoon-Shop`, branch `main`. Keep the repository root as the base directory, use the committed build command, publish `dist/public`, and retain `netlify/functions` as the functions directory. A drag-and-drop upload of only `dist/public` is not sufficient for the catalog function.
 

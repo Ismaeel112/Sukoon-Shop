@@ -44,3 +44,7 @@ The nine targeted tests, TypeScript check and Netlify static build passed. GitHu
 - [ ] Reconcile newer GitHub Netlify catalog changes before committing. Verify all tests, TypeScript, production builds, route manifest, current catalog behavior, and push the completed changes to the existing `Ismaeel112/Sukoon-Shop` main branch without overwriting newer remote history.
 
 Validated locally: TypeScript passed; all 17 automated tests passed; the production build passed; all 12 declared routes and the live catalog endpoint returned HTTP 200; Preview rendered four live products with `object-fit: contain` and no transform zoom. The local bag returned correct dialog semantics and closed with Escape.
+
+## Final Netlify catalog route
+
+- [ ] Remove the duplicate `/api/shopify/catalog` rewrite, so Netlify invokes the function's declared custom path directly rather than forwarding to its unavailable default URL. Keep the SPA fallback for customer pages only. With the owner-provided secret present for Functions and Production, deploy the fix and verify that the public catalog endpoint returns JSON products rather than HTML or a configuration error.
