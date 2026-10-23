@@ -364,25 +364,6 @@ function ProductCard({ product, onAdd }: { product: Product; onAdd: (product: Pr
   );
 }
 
-function CollectionCard({ category, image }: { category: string; image?: string }) {
-  const details = describeCollection(category);
-  const path = category === "Wall Art" ? "/shop/wall-art" : category === "Gift Sets" ? "/shop/gift-sets" : "/shop";
-
-  return (
-    <Link href={path} className="collection-card">
-      <div className="collection-card-media">
-        {image ? <img src={image} alt={`Sukoon ${category}`} loading="lazy" /> : <div className="product-image-fallback"><span>{category}</span></div>}
-      </div>
-      <div className="collection-card-copy">
-        <p className="eyebrow">{category}</p>
-        <h3>{category}</h3>
-        <p>{details.description}</p>
-        <span className="text-link">Explore {category} <ArrowRight size={16} /></span>
-      </div>
-    </Link>
-  );
-}
-
 function Home({
   onAdd,
   products,
@@ -394,9 +375,6 @@ function Home({
   catalogState: CatalogState;
   onRetry: () => void;
 }) {
-  const categories = categoriesInCatalog(products);
-  const showCollectionEdit = categories.length > 1;
-
   return (
     <main>
       <section className="hero hero-lifestyle" style={{ backgroundImage: `url(${heroImage})` }}>
@@ -410,17 +388,33 @@ function Home({
         <span className="hero-side-note">سكون <span>— peace at home</span></span>
       </section>
 
-      {showCollectionEdit && (
-        <section className="collection-discovery section-wrap">
-          <div className="section-head">
-            <div><p className="eyebrow">The Sukoon edit</p><h2>Find your kind<br /><em>of peace.</em></h2></div>
-            <p className="section-support">Browse the collections currently available from the studio.</p>
+      <section className="studio-introduction">
+        <div className="section-wrap studio-introduction-inner">
+          <div className="studio-introduction-copy">
+            <p className="eyebrow">The Sukoon way</p>
+            <h2>Made to live<br /><em>with you.</em></h2>
+            <p>We believe the pieces around you can make everyday moments feel softer, slower and more meaningful.</p>
+            <Link href="/about" className="text-link">Discover our story <ArrowRight size={16} /></Link>
           </div>
-          <div className="collection-grid">
-            {categories.map((category) => <CollectionCard key={category} category={category} image={products.find((product) => product.category === category)?.image} />)}
+          <div className="studio-principles" aria-label="Sukoon principles">
+            <article>
+              <span>01</span>
+              <h3>Quietly considered</h3>
+              <p>Thoughtful details, chosen to bring calm to the spaces you return to.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>Rooted in meaning</h3>
+              <p>Faith, warmth and intention shape every piece and every small ritual around it.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>Made for home</h3>
+              <p>Objects to live with slowly, gift with care and keep close for years to come.</p>
+            </article>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       <section className="featured section-wrap">
         <div className="section-head">

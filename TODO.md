@@ -60,3 +60,9 @@ Verified after deploy: `https://sukoonuk.netlify.app/api/shopify/catalog` return
 - [x] In all shop product cards, render the Arabic writing beneath each English title with one consistent Arabic font, weight, size, direction, baseline and line height. Preserve the live Shopify product names, prices, images, and all existing card behavior.
 
 Verified in the live shop: all four Arabic labels render in `Scheherazade New` at 20px, weight 500, right-to-left direction, and a 25px shared line box.
+
+## Homepage story section
+
+- [x] Replace the collection-led section immediately below the homepage hero and its “Explore the collection” invitation with an editorial Sukoon story section. It should introduce the brand’s thoughtful, peaceful purpose and guide visitors naturally to the About page, without changing the live Shopify product listing that follows.
+
+Verified in Preview: the new “The Sukoon way” section shows the brand story and three principles below the hero, while the live Shopify product grid remains available immediately afterwards. TypeScript, all 18 tests, and the static production build passed.
