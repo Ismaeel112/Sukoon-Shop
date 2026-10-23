@@ -31,9 +31,9 @@ The production build passed. Browser inspection confirmed all four loaded Shopif
 
 - [x] Serve `/api/shopify/catalog` through a bundled Netlify Function that reuses the existing live Shopify adapter. The API must return JSON and must not fall through to the SPA HTML redirect. Preserve Manus Preview and the existing product presentation.
 - [x] Configure or document `SHOPIFY_STORE_DOMAIN` and `SHOPIFY_STOREFRONT_ACCESS_TOKEN` as server-side Netlify Function runtime variables, never frontend/VITE variables or committed credentials.
-- [ ] Push the deployment fix to `Ismaeel112/Sukoon-Shop`, preserving existing history and remote changes. Verify the hosted catalog if Netlify deployment access permits, and report any remaining blocker accurately.
+- [x] Push the deployment fix to `Ismaeel112/Sukoon-Shop`, preserving existing history and remote changes. Verify the hosted catalog if Netlify deployment access permits, and report any remaining blocker accurately.
 
-The nine targeted tests, TypeScript check and Netlify static build passed. GitHub commit `747df53` deployed the function successfully: the API now returns JSON instead of SPA HTML. The Shopify hostname is configured for production and Functions. A production-specific Storefront token update has been submitted through the authorized Netlify connector; the next deployment must be checked to confirm that the token reaches the function.
+GitHub commits `ad11b2c` and `130875c` removed the conflicting route rewrite and added Shopify private-token authentication. The Shopify hostname and private Storefront token are configured for Netlify Functions in production. Production verification returned HTTP 200 JSON with all four published Shopify products.
 
 ## Streamline and code correction
 
@@ -41,14 +41,16 @@ The nine targeted tests, TypeScript check and Netlify static build passed. GitHu
 - [x] Make Home and Shop derive visible collections from the live catalog so unavailable categories are not promoted. Keep direct collection URLs honest and show a clear empty state when no published pieces match.
 - [x] Simplify the client structure by retaining only the small local enhancement data needed for live products, moving catalog loading into a focused hook, and removing unused app providers and dead product fields.
 - [x] Correct storefront interaction details: reset scroll on route changes, close mobile navigation after navigation, expose menu state to assistive technology, support Escape to close the bag, report the cart's total item quantity consistently, and avoid broken bag imagery when a product has no image.
-- [ ] Reconcile newer GitHub Netlify catalog changes before committing. Verify all tests, TypeScript, production builds, route manifest, current catalog behavior, and push the completed changes to the existing `Ismaeel112/Sukoon-Shop` main branch without overwriting newer remote history.
+- [x] Reconcile newer GitHub Netlify catalog changes before committing. Verify all tests, TypeScript, production builds, route manifest, current catalog behavior, and push the completed changes to the existing `Ismaeel112/Sukoon-Shop` main branch without overwriting newer remote history.
 
 Validated locally: TypeScript passed; all 17 automated tests passed; the production build passed; all 12 declared routes and the live catalog endpoint returned HTTP 200; Preview rendered four live products with `object-fit: contain` and no transform zoom. The local bag returned correct dialog semantics and closed with Escape.
 
 ## Final Netlify catalog route
 
-- [ ] Remove the duplicate `/api/shopify/catalog` rewrite, so Netlify invokes the function's declared custom path directly rather than forwarding to its unavailable default URL. Keep the SPA fallback for customer pages only. With the owner-provided secret present for Functions and Production, deploy the fix and verify that the public catalog endpoint returns JSON products rather than HTML or a configuration error.
+- [x] Remove the duplicate `/api/shopify/catalog` rewrite, so Netlify invokes the function's declared custom path directly rather than forwarding to its unavailable default URL. Keep the SPA fallback for customer pages only. With the owner-provided secret present for Functions and Production, deploy the fix and verify that the public catalog endpoint returns JSON products rather than HTML or a configuration error.
 
 ## Netlify private Storefront token
 
-- [ ] Detect the owner-created private `shpat_` Storefront token and send it with Shopify's private-token request header, while retaining the public-token header used by the managed Manus Preview connection. Redeploy and verify that the Netlify endpoint returns published live products instead of the current HTTP 502 upstream error.
+- [x] Detect the owner-created private `shpat_` Storefront token and send it with Shopify's private-token request header, while retaining the public-token header used by the managed Manus Preview connection. Redeploy and verify that the Netlify endpoint returns published live products instead of the current HTTP 502 upstream error.
+
+Verified after deploy: `https://sukoonuk.netlify.app/api/shopify/catalog` returned HTTP 200 JSON with all four published wall-art products.
