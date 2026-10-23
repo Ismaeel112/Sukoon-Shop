@@ -89,6 +89,12 @@ function getShopifyConfiguration(): { storeDomain: string; accessToken: string }
   return { storeDomain, accessToken };
 }
 
+function storefrontTokenHeader(accessToken: string): "Shopify-Storefront-Private-Token" | "X-Shopify-Storefront-Access-Token" {
+  return accessToken.startsWith("shpat_")
+    ? "Shopify-Storefront-Private-Token"
+    : "X-Shopify-Storefront-Access-Token";
+}
+
 export function isShopifyConfigurationError(error: unknown): boolean {
   return error instanceof Error && (
     error.message.startsWith("SHOPIFY_STORE_DOMAIN") ||
@@ -147,7 +153,7 @@ function mapProduct(product: ShopifyProduct): Product {
 async function fetchCatalogPage(storeDomain: string, accessToken: string, after: string | null): Promise<ShopifyProductsPage> {
   const response = await fetch(`https://${storeDomain}/api/${SHOPIFY_API_VERSION}/graphql.json`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", "X-Shopify-Storefront-Access-Token": accessToken },
+    headers: { "Content-Type": "application/json", [storefrontTokenHeader(accessToken)]: accessToken },
     body: JSON.stringify({ query: PRODUCT_CATALOG_QUERY, variables: { after } }),
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });

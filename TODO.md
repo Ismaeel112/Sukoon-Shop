@@ -48,3 +48,7 @@ Validated locally: TypeScript passed; all 17 automated tests passed; the product
 ## Final Netlify catalog route
 
 - [ ] Remove the duplicate `/api/shopify/catalog` rewrite, so Netlify invokes the function's declared custom path directly rather than forwarding to its unavailable default URL. Keep the SPA fallback for customer pages only. With the owner-provided secret present for Functions and Production, deploy the fix and verify that the public catalog endpoint returns JSON products rather than HTML or a configuration error.
+
+## Netlify private Storefront token
+
+- [ ] Detect the owner-created private `shpat_` Storefront token and send it with Shopify's private-token request header, while retaining the public-token header used by the managed Manus Preview connection. Redeploy and verify that the Netlify endpoint returns published live products instead of the current HTTP 502 upstream error.

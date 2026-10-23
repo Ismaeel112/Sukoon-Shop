@@ -127,6 +127,25 @@ describe("getShopifyCatalog", () => {
     });
   });
 
+  it("uses Shopify's private Storefront header for Headless private access tokens", async () => {
+    vi.stubEnv("SHOPIFY_STORE_DOMAIN", "shop.example.com");
+    vi.stubEnv("SHOPIFY_STOREFRONT_ACCESS_TOKEN", "shpat_test-private-token");
+    const request = vi.fn().mockResolvedValue(catalogResponse([]));
+    vi.stubGlobal("fetch", request);
+
+    await expect(getShopifyCatalog()).resolves.toEqual([]);
+
+    expect(request).toHaveBeenCalledWith(
+      "https://shop.example.com/api/2026-10/graphql.json",
+      expect.objectContaining({
+        headers: {
+          "Content-Type": "application/json",
+          "Shopify-Storefront-Private-Token": "shpat_test-private-token",
+        },
+      })
+    );
+  });
+
   it("traverses all product pages using the returned cursor", async () => {
     vi.stubEnv("SHOPIFY_STORE_DOMAIN", "shop.example.com");
     vi.stubEnv("SHOPIFY_STOREFRONT_ACCESS_TOKEN", "test-token");

@@ -12,7 +12,7 @@ Netlify must build the full repository from `Ismaeel112/Sukoon-Shop`, branch `ma
 
 ## Runtime configuration
 
-In Netlify's environment-variable settings, configure `SHOPIFY_STORE_DOMAIN` as the canonical Shopify hostname and `SHOPIFY_STOREFRONT_ACCESS_TOKEN` as the connected store's Storefront token. Their scope must include **Functions** and the relevant deploy context. Do not use an Admin token, do not prefix these with `VITE_`, and do not put credentials into `netlify.toml`, `.env` files committed to GitHub, or browser code.
+In Netlify's environment-variable settings, configure `SHOPIFY_STORE_DOMAIN` as the canonical Shopify hostname and `SHOPIFY_STOREFRONT_ACCESS_TOKEN` as the connected store's private Headless Storefront token. Their scope must include **Functions** and the relevant deploy context. The catalog adapter sends `shpat_` tokens with Shopify's server-only `Shopify-Storefront-Private-Token` header and retains public-token compatibility for the managed Preview connection. Do not use an Admin token, do not prefix these with `VITE_`, and do not put credentials into `netlify.toml`, `.env` files committed to GitHub, or browser code.
 
 Manus's managed runtime variables are not automatically transferred to Netlify by a GitHub push. Configure Netlify's server-side environment separately, then redeploy so the function receives the new values. With this same-origin function, `VITE_API_BASE_URL`, a separate Express host, and cross-origin CORS settings are not needed for products.
 
