@@ -211,11 +211,12 @@ async function fetchCatalogPage(
   );
 
 
-  if (!response.ok) {
-    throw new Error(
-      `Shopify Storefront API request failed with HTTP ${response.status}.`
-    );
-  }
+ if (!response.ok) {
+  const responseBody = await response.text();
+  throw new Error(
+    `Shopify Storefront API request failed with HTTP ${response.status}: ${responseBody}`
+  );
+}
 
   let payload: ShopifyCatalogResponse;
   try {
