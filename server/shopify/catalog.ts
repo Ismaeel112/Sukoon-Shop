@@ -194,12 +194,14 @@ async function fetchCatalogPage(
   accessToken: string,
   after: string | null
 ): Promise<ShopifyProductsPage> {
+  
   const response = await fetch(
     `https://${storeDomain}/api/${SHOPIFY_API_VERSION}/graphql.json`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         query: PRODUCT_CATALOG_QUERY,
         variables: { after },
@@ -207,6 +209,7 @@ async function fetchCatalogPage(
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     }
   );
+
 
   if (!response.ok) {
     throw new Error(
