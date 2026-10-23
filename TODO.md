@@ -54,3 +54,9 @@ Validated locally: TypeScript passed; all 17 automated tests passed; the product
 - [x] Detect the owner-created private `shpat_` Storefront token and send it with Shopify's private-token request header, while retaining the public-token header used by the managed Manus Preview connection. Redeploy and verify that the Netlify endpoint returns published live products instead of the current HTTP 502 upstream error.
 
 Verified after deploy: `https://sukoonuk.netlify.app/api/shopify/catalog` returned HTTP 200 JSON with all four published wall-art products.
+
+## Arabic product subtitles
+
+- [x] In all shop product cards, render the Arabic writing beneath each English title with one consistent Arabic font, weight, size, direction, baseline and line height. Preserve the live Shopify product names, prices, images, and all existing card behavior.
+
+Verified in the live shop: all four Arabic labels render in `Scheherazade New` at 20px, weight 500, right-to-left direction, and a 25px shared line box.
