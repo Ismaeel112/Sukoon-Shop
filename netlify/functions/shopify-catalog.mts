@@ -21,10 +21,15 @@ if (!process.env.SHOPIFY_STORE_DOMAIN) {
   try {
     const products = await getShopifyCatalog();
     return Response.json({ products }, { headers });
-  } catch {
-    return Response.json(
-      { message: "The Shopify product collection is unavailable. Please try again shortly." },
-      { status: 502, headers },
-    );
-  }
+  
+} catch (error) {
+  console.error("Shopify catalog error:", error);
+  return Response.json(
+    {
+      message: "The Shopify product collection is unavailable.",
+      error: error instanceof Error ? error.message : String(error),
+    },
+    { status: 502, headers },
+  );
 }
+
