@@ -7,7 +7,7 @@ import { publicPlatformScript } from "./publicConfig";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
-import { getShopifyCatalog } from "../shopify/catalog";
+import { getShopifyCatalog, isShopifyConfigurationError } from "../shopify/catalog";
 
 async function startServer() {
   const app = express();
@@ -33,8 +33,13 @@ async function startServer() {
     res.set("Cache-Control", "no-store");
     try {
       res.json({ products: await getShopifyCatalog() });
-    } catch {
-      res.status(502).json({ message: "The Shopify product collection is unavailable. Please try again shortly." });
+    } catch (error) {
+      const configurationError = isShopifyConfigurationError(error);
+      res.status(configurationError ? 503 : 502).json({
+        message: configurationError
+          ? "The Shopify product connection is not configured on this deployment."
+          : "The Shopify product collection is unavailable. Please try again shortly.",
+      });
     }
   });
   app.get("/api/platform/config.js", (_req, res) => {

@@ -1,33 +1,34 @@
+import { getShopifyCatalog, isShopifyConfigurationError } from "../../server/shopify/catalog";
 
 const headers = { "Cache-Control": "no-store" };
 
-export default async function handler(request: Request): Promise<Response> {
-  if (request.method !== "GET") {
-    return Response.json(
-      { message: "Method not allowed." },
-      { status: 405, headers: { ...headers, Allow: "GET" } },
-    );
-  }
+type CatalogLoader = typeof getShopifyCatalog;
 
-  if (!process.env.SHOPIFY_STORE_DOMAIN) {
-    return Response.json(
-      { message: "The Shopify store domain is not configured on this deployment." },
-      { status: 503, headers },
-    );
-  }
+export const config = { path: "/api/shopify/catalog" };
 
-  try {
-    const { getShopifyCatalog } = await import("../../server/shopify/catalog");
-    const products = await getShopifyCatalog();
-    return Response.json({ products }, { headers });
-  } catch (error) {
-    console.error("Shopify catalog error:", error);
-    return Response.json(
-      {
-        message: "The Shopify product collection is unavailable.",
-        error: error instanceof Error ? error.message : String(error),
-      },
-      { status: 502, headers },
-    );
-  }
+export function createCatalogHandler(loadCatalog: CatalogLoader = getShopifyCatalog) {
+  return async function handler(request: Request): Promise<Response> {
+    if (request.method !== "GET") {
+      return Response.json(
+        { message: "Method not allowed." },
+        { status: 405, headers: { ...headers, Allow: "GET" } },
+      );
+    }
+
+    try {
+      return Response.json({ products: await loadCatalog() }, { headers });
+    } catch (error) {
+      const configurationError = isShopifyConfigurationError(error);
+      return Response.json(
+        {
+          message: configurationError
+            ? "The Shopify product connection is not configured on this deployment."
+            : "The Shopify product collection is unavailable. Please try again shortly.",
+        },
+        { status: configurationError ? 503 : 502, headers },
+      );
+    }
+  };
 }
+
+export default createCatalogHandler();

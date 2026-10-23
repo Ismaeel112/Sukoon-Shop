@@ -34,3 +34,13 @@ The production build passed. Browser inspection confirmed all four loaded Shopif
 - [ ] Push the deployment fix to `Ismaeel112/Sukoon-Shop`, preserving existing history and remote changes. Verify the hosted catalog if Netlify deployment access permits, and report any remaining blocker accurately.
 
 The nine targeted tests, TypeScript check and Netlify static build passed. GitHub commit `747df53` deployed the function successfully: the API now returns JSON instead of SPA HTML. The Shopify hostname is configured for production and Functions. A production-specific Storefront token update has been submitted through the authorized Netlify connector; the next deployment must be checked to confirm that the token reaches the function.
+
+## Streamline and code correction
+
+- [x] Preserve the original Sukoon visual identity and only live Shopify products, while removing local placeholder products, stale saved-catalog availability text, and empty collection promotion from the customer journey.
+- [x] Make Home and Shop derive visible collections from the live catalog so unavailable categories are not promoted. Keep direct collection URLs honest and show a clear empty state when no published pieces match.
+- [x] Simplify the client structure by retaining only the small local enhancement data needed for live products, moving catalog loading into a focused hook, and removing unused app providers and dead product fields.
+- [x] Correct storefront interaction details: reset scroll on route changes, close mobile navigation after navigation, expose menu state to assistive technology, support Escape to close the bag, report the cart's total item quantity consistently, and avoid broken bag imagery when a product has no image.
+- [ ] Reconcile newer GitHub Netlify catalog changes before committing. Verify all tests, TypeScript, production builds, route manifest, current catalog behavior, and push the completed changes to the existing `Ismaeel112/Sukoon-Shop` main branch without overwriting newer remote history.
+
+Validated locally: TypeScript passed; all 17 automated tests passed; the production build passed; all 12 declared routes and the live catalog endpoint returned HTTP 200; Preview rendered four live products with `object-fit: contain` and no transform zoom. The local bag returned correct dialog semantics and closed with Escape.
