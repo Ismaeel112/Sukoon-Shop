@@ -2,10 +2,9 @@ import type { Product } from "../../client/src/data/sukoon";
 
 const SHOPIFY_API_VERSION = "2026-10";
 const PRODUCTS_PER_PAGE = 100;
-const VARIANTS_PER_PRODUCT = 250;
+const VARIANTS_PER_PRODUCT = 20;
 const MAX_PRODUCT_PAGES = 100;
 const REQUEST_TIMEOUT_MS = 10_000;
-
 const PRODUCT_CATALOG_QUERY = `
   query ShopifyCatalog($after: String) {
     products(first: ${PRODUCTS_PER_PAGE}, after: $after, sortKey: TITLE) {
